@@ -4,7 +4,7 @@ import React from 'react'
 
 const TestimonialsCard = () => {
   return (
-    <div className='grid grid-cols-4 gap-4 items-center  mt-8'>
+    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center  mt-8'>
       {
         TestimonialsCardData.map((card, index) => (
             <div key={index} className='flex flex-col gap-4 items-start text-left h-full border bg-white px-4 py-6'>
