@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ebGaramondSans, interSans } from "./fonts";
 import "./globals.css";
+import Header from "@/components/Header";
 
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${interSans.variable} ${ebGaramondSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+              <Header />
+        {children}
+      </body>
     </html>
   );
 }
