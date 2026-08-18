@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ebGaramondSans, interSans } from "./fonts";
 import "./globals.css";
 import Header from "@/components/Header";
+import Providers from "./providers";
 
 
 export const metadata: Metadata = {
@@ -16,8 +17,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${interSans.variable} ${ebGaramondSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-              <Header />
-        {children}
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
+
       </body>
     </html>
   );

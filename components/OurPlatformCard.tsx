@@ -1,4 +1,4 @@
-import { platformCardData } from '@/libs/OurPlatform'
+import { platformCardData } from '@/libs/data/OurPlatform'
 import Image from 'next/image'
 import React from 'react'
 

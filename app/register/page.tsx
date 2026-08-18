@@ -1,7 +1,7 @@
 import Footer from '@/components/Footer'
 import RegisterForm from '@/components/RegisterForm'
 import RegisterIllustration from '@/components/RegisterIllustration'
-import React from 'react'
+
 
 const page = () => {
   return (

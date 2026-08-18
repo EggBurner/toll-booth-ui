@@ -1,4 +1,4 @@
-import { TestimonialsCardData } from '@/libs/Testimonails'
+import { TestimonialsCardData } from '@/libs/data/Testimonails'
 import Image from 'next/image'
 import React from 'react'
 
