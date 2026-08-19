@@ -1,8 +1,16 @@
+"use client"
+
 import Link from 'next/link'
 import { Link2, Calendar, BarChart2, ArrowRight } from 'lucide-react'
-import { dashboardLinksData } from '@/libs/data/DashboardLinks'
+import { useAppSelector } from '@/libs/hooks'
 
 const LatestLinks = () => {
+  const links = useAppSelector((state) => state.links.items)
+
+  const latest = [...links]
+    .sort((a, b) => new Date(b.linkDateCreated).getTime() - new Date(a.linkDateCreated).getTime())
+    .slice(0, 3)
+
   return (
     <div className='mt-8'>
       <div className='flex items-center justify-between mb-4'>
@@ -14,21 +22,29 @@ const LatestLinks = () => {
       </div>
 
       <div className='flex flex-col border border-gray-200 rounded-xs bg-white divide-y divide-gray-200'>
-        {dashboardLinksData.map((link) => (
-          <div key={link.shortUrl} className='px-6 py-5'>
+        {latest.length === 0 && (
+          <p className='px-6 py-5 text-sm text-secondary'>No links yet — create your first one.</p>
+        )}
+
+        {latest.map((link) => (
+          <div key={link._id} className='px-6 py-5'>
             <p className='flex items-center gap-2 font-medium'>
               <Link2 size={16} className='text-secondary shrink-0' />
-              {link.shortUrl}
+              {link.shortCode}
             </p>
-            <p className='text-sm text-secondary mt-1 truncate'>{link.longUrl}</p>
+            <p className='text-sm text-secondary mt-1 truncate'>{link.targetLink}</p>
             <div className='flex items-center gap-4 text-xs text-secondary mt-3'>
               <span className='flex items-center gap-1'>
                 <Calendar size={14} />
-                {link.date}
+                {new Date(link.linkDateCreated).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
               </span>
               <span className='flex items-center gap-1'>
                 <BarChart2 size={14} />
-                {link.clicks} Clicks
+                {link.visitCount} Clicks
               </span>
             </div>
           </div>

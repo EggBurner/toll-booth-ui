@@ -20,6 +20,23 @@ const RegisterForm = () => {
   );
 }
 
+  function getErrorMessage(error: FetchBaseQueryError): string {
+    if (error.status === 'PARSING_ERROR') {
+      return error.data || error.error
+    }
+    if (typeof error.status === 'number') {
+      const data = error.data
+      if (data && typeof data === 'object' && 'message' in data) {
+        return String((data as { message: unknown }).message)
+      }
+      if (typeof data === 'string' && data) {
+        return data
+      }
+      return `Request failed with status ${error.status}`
+    }
+    return error.error
+  }
+
 
   const router = useRouter();
 
@@ -58,10 +75,8 @@ const RegisterForm = () => {
 
       router.push("/login");
     } catch (err) {
-          console.log("Registeration failed: ", err)
+          console.log("Registeration failed: ", isFetchBaseQueryError(err) ? err.data : err)
     }
-
-    console.log(error)
   }
 
 
@@ -135,7 +150,7 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        {error && isFetchBaseQueryError(error) && <p className='text-red-500 text-sm'>{String(error.data)}</p>}
+        {error && isFetchBaseQueryError(error) && <p className='text-red-500 text-sm'>{getErrorMessage(error)}</p>}
 
         <button
           type='submit'

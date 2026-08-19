@@ -1,11 +1,9 @@
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar'
 import DashboardTopbar from '@/components/dashboard/DashboardTopbar'
 import DashboardFooter from '@/components/dashboard/DashboardFooter'
-import WelcomeCard from '@/components/dashboard/WelcomeCard'
-import StatsRow from '@/components/dashboard/StatsRow'
-import LatestLinks from '@/components/dashboard/LatestLinks'
+import CreateLinkForm from '@/components/dashboard/CreateLinkForm'
 
-const DashboardPage = () => {
+const CreateLinkPage = () => {
   return (
     <div className='flex min-h-screen bg-background'>
       <DashboardSidebar />
@@ -14,9 +12,7 @@ const DashboardPage = () => {
         <DashboardTopbar />
 
         <main className='flex-1 w-full max-w-5xl mx-auto px-4 sm:px-8 py-8'>
-          <WelcomeCard />
-          <StatsRow />
-          <LatestLinks />
+          <CreateLinkForm />
         </main>
 
         <DashboardFooter />
@@ -25,4 +21,4 @@ const DashboardPage = () => {
   )
 }
 
-export default DashboardPage
+export default CreateLinkPage

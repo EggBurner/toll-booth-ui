@@ -18,10 +18,16 @@ const LoginForm = () => {
   }
 
   function getErrorMessage(error: FetchBaseQueryError): string {
+    if (error.status === 'PARSING_ERROR') {
+      return error.data || error.error
+    }
     if (typeof error.status === 'number') {
       const data = error.data
       if (data && typeof data === 'object' && 'message' in data) {
         return String((data as { message: unknown }).message)
+      }
+      if (typeof data === 'string' && data) {
+        return data
       }
       return `Request failed with status ${error.status}`
     }
@@ -60,7 +66,7 @@ const LoginForm = () => {
 
       router.push("/dashboard")
     } catch (err) {
-      console.log("Login Failed: ", err)
+      console.log("Login Failed: ", isFetchBaseQueryError(err) ? err.data : err)
     }
   }
   return (
