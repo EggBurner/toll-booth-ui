@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ebGaramondSans, interSans } from "./fonts";
 import "./globals.css";
-import Header from "@/components/Header";
+import ConditionalHeader from "@/components/ConditionalHeader";
 import Providers from "./providers";
 
 
@@ -18,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <Providers>
-          <Header />
+          <ConditionalHeader />
           {children}
         </Providers>
 

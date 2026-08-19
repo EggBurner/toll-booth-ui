@@ -3,22 +3,81 @@
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { useLoginMutation } from '@/services/authApi'
+import { useRouter } from 'next/navigation'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false)
 
+  function isFetchBaseQueryError(error: unknown) : error is FetchBaseQueryError {
+    return (
+      typeof error === 'object' &&
+      error != null &&
+      "status" in error
+    )
+  }
+
+  function getErrorMessage(error: FetchBaseQueryError): string {
+    if (typeof error.status === 'number') {
+      const data = error.data
+      if (data && typeof data === 'object' && 'message' in data) {
+        return String((data as { message: unknown }).message)
+      }
+      return `Request failed with status ${error.status}`
+    }
+    return error.error
+  }
+
+  const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false)
+  const [login, {isLoading, error}] = useLoginMutation()
+
+
+  const [form, setForm] = useState({
+    email: "",
+    password: ""
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({
+      ...form,
+      [e.target.name] : e.target.value,
+    })
+  }
+
+  const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    try {
+      const response = await login(form).unwrap()
+      console.log(response);
+
+      setForm({
+        email: "",
+        password: ""
+      });
+
+      router.push("/dashboard")
+    } catch (err) {
+      console.log("Login Failed: ", err)
+    }
+  }
   return (
     <div className='w-full lg:w-1/2 px-6 py-10 sm:px-10 sm:py-12 lg:p-14 flex flex-col justify-center font-standard'>
       <h1 className='font-headline text-4xl sm:text-5xl'>Login</h1>
 
-      <form className='mt-8 flex flex-col gap-6'>
+      <form className='mt-8 flex flex-col gap-6' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-2'>
           <label htmlFor='email' className='text-sm'>Your Email</label>
           <input
             id='email'
             type='email'
+            name='email'
             placeholder='johndoe@xyz.com'
             className='border border-gray-300 rounded-xs px-4 py-3 w-full placeholder:text-gray-400 focus:outline-0 focus:border-black'
+            value={form.email}
+            onChange={handleChange}
           />
         </div>
 
@@ -30,6 +89,9 @@ const LoginForm = () => {
               type={showPassword ? 'text' : 'password'}
               placeholder='8+ characters'
               className='border border-gray-300 rounded-xs px-4 py-3 pr-10 w-full placeholder:text-gray-400 focus:outline-0 focus:border-black'
+              value={form.password}
+              onChange={handleChange}
+              name='password'
             />
             <button
               type='button'
@@ -42,6 +104,7 @@ const LoginForm = () => {
           </div>
         </div>
 
+        {error && isFetchBaseQueryError(error) && <p className='text-red-500 text sm'>{getErrorMessage(error)}</p>}
         <button
           type='submit'
           className='bg-black text-background rounded-xs py-3 font-medium mt-2'

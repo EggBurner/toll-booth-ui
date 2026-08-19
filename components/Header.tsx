@@ -1,8 +1,15 @@
+"use client";
+
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useAppSelector } from '@/libs/hooks';
+import { stat } from 'fs';
 
 const Header = () => {
+
+    const user = useAppSelector((state) => state.auth.user)
+    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+
   return (
     <header className='flex flex-col md:flex-row items-center px-4 sm:px-8 py-4 border-b gap-4 md:gap-0'>
         <Link href={'/'} className='flex items-center gap-4 w-full md:w-[60%]'>
@@ -19,8 +26,18 @@ const Header = () => {
                 <li>Enterprise</li>
             </menu>
             <menu className='flex items-center gap-4 sm:gap-6 lg:gap-12'>
-                <Link href={'/login'}><li>Log In</li></Link>
-                <Link href={'/register'}><li className='bg-black text-background px-4 py-2 rounded-xs'>Sign Up Free</li></Link>
+
+            {
+                !isAuthenticated || user == null ? (
+                    <>
+                        <li><Link href={'/login'}>Log In</Link></li>
+                        <li><Link href={'/register'} className='bg-black text-background px-4 py-2 rounded-xs'>Sign Up Free</Link></li>
+                    </>
+                ) : null
+            }
+                    
+            
+               
 
             </menu>
         </nav>

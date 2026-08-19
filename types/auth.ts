@@ -10,3 +10,24 @@ export interface SignUpResponse {
     message: string;
     id: string;
 }
+
+export interface LoginRequest {
+    email: string;
+    password: string;
+}
+
+export interface LoginResponse {
+    approvalStatus: boolean;
+    message: string;
+    user: LoginResponseUser
+}
+
+export interface LoginResponseUser {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    activeLinksCount: number;
+    totalLinksCount: number;
+    role: string;
+}
