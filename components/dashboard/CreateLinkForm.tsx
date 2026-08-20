@@ -2,14 +2,77 @@
 
 import React, { useState } from 'react'
 import { Link2, Lock, Check } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useCreateLinkMutation } from '@/services/linkApi'
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useAppSelector } from '@/libs/hooks'
 
 const CreateLinkForm = () => {
+
+  const user = useAppSelector((state) => state.auth.user)
+
+
+  function isFetchBaseQueryError(
+    error: unknown
+  ): error is FetchBaseQueryError {
+    return (
+      typeof error === "object" &&
+      error !== null &&
+      "status" in error
+    );
+  }
+
+  function getErrorMessage(error: FetchBaseQueryError): string {
+    if (error.status === 'PARSING_ERROR') {
+      return error.data || error.error
+    }
+    if (typeof error.status === 'number') {
+      const data = error.data
+      if (data && typeof data === 'object' && 'message' in data) {
+        return String((data as { message: unknown }).message)
+      }
+      if (typeof data === 'string' && data) {
+        return data
+      }
+      return `Request failed with status ${error.status}`
+    }
+    return error.error
+  }
+
+  const router = useRouter();
+
+  const [createLink, { isLoading, error }] = useCreateLinkMutation()
+
   const [longLink, setLongLink] = useState('')
   const [pinProtected, setPinProtected] = useState(false)
   const [pin, setPin] = useState('')
+  const ownerID = user?._id
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (!ownerID) {
+      console.log("Link creation failed: no authenticated user")
+      return
+    }
+
+    try {
+      const response = await createLink({
+        targetLink: longLink,
+        pinProtected: pinProtected,
+        pin,
+        ownerID,
+      }).unwrap()
+      console.log(response);
+
+      setLongLink('')
+      setPinProtected(false)
+      setPin('')
+
+      router.push("/dashboard")
+    } catch (err) {
+      console.log("Link creation failed: ", isFetchBaseQueryError(err) ? err.data : err)
+    }
   }
 
   const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +142,8 @@ const CreateLinkForm = () => {
             </div>
           </div>
         </div>
+
+        {error && isFetchBaseQueryError(error) && <p className='text-red-500 text-sm'>{getErrorMessage(error)}</p>}
 
         <button
           type='submit'

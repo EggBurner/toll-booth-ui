@@ -16,3 +16,15 @@ export interface Link {
 export interface LinkResponse {
     links: Link[];
 }
+
+export interface CreateLinkRequest{
+    targetLink: string;
+    pinProtected: boolean;
+    pin: string;
+    ownerID: string;
+}
+
+export interface CreateLinkResponse {
+        message: string;
+        id: string;
+}
