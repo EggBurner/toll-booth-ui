@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import type { CreateLinkResponse, CreateLinkRequest, Link, LinkRequest, LinkResponse } from "@/types/Link";
+import type { CreateLinkResponse, CreateLinkRequest, Link, LinkRequest, LinkResponse, RedirectRequestResponse, RedirectRequest, RedirectResponse } from "@/types/Link";
 
 export const linkApi = createApi({
     reducerPath: "linkApi",
@@ -31,8 +31,18 @@ export const linkApi = createApi({
                 body: linkData
             }),
             invalidatesTags: [{ type: "Link", id: "LIST" }]
+        }),
+        getRedirectRequest: builder.query<RedirectRequestResponse, string>({
+            query: (shortCode) => `/redirect-request/${shortCode}`
+        }),
+        verifyRedirectPin: builder.mutation<RedirectResponse, RedirectRequest>({
+            query: (linkData) => ({
+                url: "/redirect",
+                method: "POST",
+                body: linkData
+            })
         })
     })
 })
 
-export const { useGetLinksQuery, useCreateLinkMutation } = linkApi
+export const { useGetLinksQuery, useCreateLinkMutation, useGetRedirectRequestQuery, useVerifyRedirectPinMutation } = linkApi

@@ -28,3 +28,20 @@ export interface CreateLinkResponse {
         message: string;
         id: string;
 }
+
+export interface RedirectRequestResponse {
+    targetLink: string;
+    shortCode: string;
+    status: string;
+    pinProtected: boolean;
+}
+
+export interface RedirectRequest {
+    shortCode: string,
+    pin: string,
+}
+
+export interface RedirectResponse {
+    targetLink: string,
+    pinMatch: boolean,
+}
