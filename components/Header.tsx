@@ -20,10 +20,10 @@ const Header = () => {
 
         <nav className='flex flex-col sm:flex-row items-center justify-between w-full gap-4 sm:gap-0'>
             <menu className='flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-12'>
-                <li>Features</li>
-                <li>Pricing</li>
-                <li>Resources</li>
-                <li>Enterprise</li>
+                <li><Link href={'/features'}>Features</Link></li>
+                <li><Link href={'/pricing'}>Pricing</Link></li>
+                <li><Link href={'/resources'}>Resources</Link></li>
+                <li><Link href={'/enterprise'}>Enterprise</Link></li>
             </menu>
             <menu className='flex items-center gap-4 sm:gap-6 lg:gap-12'>
 
