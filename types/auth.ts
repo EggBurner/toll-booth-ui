@@ -31,3 +31,13 @@ export interface LoginResponseUser {
     totalLinksCount: number;
     role: string;
 }
+
+export interface ResetPasswordRequest {
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+}
+
+export interface ResetPasswordResponse {
+    message: string;
+}
