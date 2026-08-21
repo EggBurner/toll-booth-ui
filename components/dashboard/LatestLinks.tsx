@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Link2, Calendar, BarChart2, ArrowRight } from 'lucide-react'
 import { useAppSelector } from '@/libs/hooks'
+import CopyLinkButton from './CopyLinkButton'
 
 const LatestLinks = () => {
   const links = useAppSelector((state) => state.links.items)
@@ -28,9 +29,12 @@ const LatestLinks = () => {
 
         {latest.map((link) => (
           <div key={link._id} className='px-6 py-5'>
-            <p className='flex items-center gap-2 font-medium'>
-              <Link2 size={16} className='text-secondary shrink-0' />
-              {link.shortCode}
+            <p className='flex items-center justify-between gap-2 font-medium'>
+              <span className='flex items-center gap-2 min-w-0'>
+                <Link2 size={16} className='text-secondary shrink-0' />
+                <span className='truncate'>https://toll-booth-ui.vercel.app/{link.shortCode}</span>
+              </span>
+              <CopyLinkButton link={`https://toll-booth-ui.vercel.app/${link.shortCode}`} />
             </p>
             <p className='text-sm text-secondary mt-1 truncate'>{link.targetLink}</p>
             <div className='flex items-center gap-4 text-xs text-secondary mt-3'>
